@@ -3,3 +3,5 @@ This is a custom UI library for C# in an aseprite-inspired but distinct enough v
 You are welcome to use it and provide feedback nontheless.
 
 Documentation pending.
+
+By the way, it's stylized as πUI, the pi stands for pixellated.
