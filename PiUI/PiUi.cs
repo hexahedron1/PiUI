@@ -77,9 +77,10 @@ public static class PiUi {
             int gy = i / 16 * 11 + 1;
             int gw = 0;
             for (; gw < 6; gw++) {
-                SDL.ReadSurfacePixel(regularSurface, gx + gw, gy, out byte r, out _, out _, out byte a);
+                SDL.ReadSurfacePixel(regularSurface, gx + gw, gy, out byte r, out byte g, out byte b, out byte a);
                 //Console.WriteLine($"    {r} {a}");
-                if (r == 255 && a == 255) break;
+                if ((r == 0 && g == 0 && b == 0 && a == 255)
+                    || (r == 255 && g == 0 && b == 0 && a == 0)) break;
             }
             char c = char.ConvertFromUtf32(i + 0x20)[0];
             SmallFont.Glyphs.Add(c, new SDL.FRect {
