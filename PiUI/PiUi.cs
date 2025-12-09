@@ -56,7 +56,6 @@ public static class PiUi {
             int gw = 0;
             for (; gw < 10; gw++) {
                 SDL.ReadSurfacePixel(regularSurface, gx + gw, gy, out byte r, out byte g, out byte b, out byte a);
-                //Console.WriteLine($"    {r} {a}");
                 if ((r == 0 && g == 0 && b == 0 && a == 255)
                     || (r == 255 && g == 0 && b == 0 && a == 0)) break;
             }
@@ -78,7 +77,6 @@ public static class PiUi {
             int gw = 0;
             for (; gw < 6; gw++) {
                 SDL.ReadSurfacePixel(regularSurface, gx + gw, gy, out byte r, out byte g, out byte b, out byte a);
-                //Console.WriteLine($"    {r} {a}");
                 if ((r == 0 && g == 0 && b == 0 && a == 255)
                     || (r == 255 && g == 0 && b == 0 && a == 0)) break;
             }
@@ -86,7 +84,7 @@ public static class PiUi {
             SmallFont.Glyphs.Add(c, new SDL.FRect {
                 X = gx,
                 Y = gy,
-                W = gw,
+                W = gw - 1, // i do not know why, but it always adds an extra pixel of width on the small font
                 H = 5
             });
         }
