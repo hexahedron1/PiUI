@@ -36,6 +36,7 @@ public class Window : IComponent, IDisposable {
         if (!external) {
             SdlWindow = SDL.CreateWindow("test", w, h, SDL.WindowFlags.Hidden);
             Renderer = SDL.CreateRenderer(SdlWindow, null);
+            SDL.SetDefaultTextureScaleMode(Renderer, SDL.ScaleMode.PixelArt);
             Width = w;
             Height = h;
         }
@@ -63,8 +64,9 @@ public class Window : IComponent, IDisposable {
         Console.WriteLine($"New size: {Width*2}x{Height*2}");
         SDL.SetWindowSize(SdlWindow, Width*2, Height*2);
     }
-    public (int, int) Draw(int x, int y) {
-        if (Renderer == IntPtr.Zero) return (Width, Height);
+    public void Draw(int x, int y) {
+        if (!Visible) return;
+        if (Renderer == IntPtr.Zero) return;
         PiUi.SetColor(Renderer, Colors.Background);
         SDL.RenderClear(Renderer);
         PiUi.SetColor(Renderer, Colors.InternalBorder);
@@ -77,7 +79,9 @@ public class Window : IComponent, IDisposable {
         PiUi.DrawPixel(Renderer, Width-2, Height - 2);
         if (PrimaryContainer != null) PrimaryContainer.Value.Draw(x + Padding, y + Padding);
         SDL.RenderPresent(Renderer);
+    }
 
+    public (int, int) GetSize() {
         return (Width, Height);
     }
 

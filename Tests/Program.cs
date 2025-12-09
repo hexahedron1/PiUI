@@ -1,12 +1,12 @@
-﻿using PiUI;
-
-PiUi.DebugDraw = true;
+﻿using System.Reflection;
+using PiUI;
+using SDL3;
+PiUi.DebugDraw = false;
 PiUi.Init("Test", 240, 136);
-
 Window? pWin = PiUi.PrimaryWindow;
-if (pWin != null) {
-    StackBox box = new(pWin.Renderer);
-    pWin.PrimaryContainer = box;
-}
-
+if (pWin is null) return;
+StackBox box = new(pWin.Renderer);
+pWin.PrimaryContainer = box;
+Label label = new(pWin.Renderer, "Test", PiUi.RegularFont);
+box.Components.Add(label);
 PiUi.Start();

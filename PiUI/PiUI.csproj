@@ -8,13 +8,20 @@
 
     <ItemGroup>
       <PackageReference Include="SDL3-CS" Version="3.3.2.1" />
+      <PackageReference Include="SDL3-CS.Native" Version="3.3.2" />
+      <PackageReference Include="SDL3-CS.Native.Image" Version="3.2.4" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="aseprite.ttf" />
-      <EmbeddedResource Include="aseprite.ttf" />
       <None Remove="aseprite-mini.ttf" />
-      <EmbeddedResource Include="aseprite-mini.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\aseprite_font.png" />
+      <EmbeddedResource Include="Resources\aseprite_font.png" />
+      <None Remove="Resources\aseprite_mini.png" />
+      <EmbeddedResource Include="Resources\aseprite_mini.png" />
     </ItemGroup>
 
 </Project>

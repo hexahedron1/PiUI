@@ -7,8 +7,9 @@ namespace PiUI;
 /// </summary>
 public interface IComponent {
     public Property<bool> Visible { get; set; }
-    public (int, int) Draw(int x, int y);
+    public void Draw(int x, int y);
     public IntPtr Renderer { get; internal set; }
+    public (int, int) GetSize();
 }
 
 /// <summary>
@@ -19,7 +20,7 @@ enum Alignment {
 }
 
 public interface IContainer : IComponent {
-    public IComponent[] Components { get; set; }
+    public List<IComponent> Components { get; set; }
     public Property<int> Width { get; set; }
     public Property<int> Height { get; set; }
 }
