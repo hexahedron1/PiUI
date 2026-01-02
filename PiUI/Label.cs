@@ -18,15 +18,6 @@ public class Label(IntPtr renderer, string text, Font font) : IComponent {
         if (!Visible) return;
         Font.Value.DrawText(Renderer,  Text, x, y+1, Colors.Shadow);
         Font.Value.DrawText(Renderer,  Text, x, y, Colors.Text);
-        if (PiUi.DebugDraw) {
-            PiUi.SetColor(Renderer, PiUi.Colors.Debug2);
-            var (w, h) = GetSize();
-            SDL.FRect rect = new() {
-                X = x, Y = y,
-                W = w, H = h
-            };
-            SDL.RenderRect(Renderer, rect);
-        }
     }
     public (int, int) GetSize() => (Font.Value.MeasureText(Text), Font.Value.Height);
 }

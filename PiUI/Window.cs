@@ -64,7 +64,9 @@ public class Window : IComponent, IDisposable {
         Console.WriteLine($"New size: {Width*2}x{Height*2}");
         SDL.SetWindowSize(SdlWindow, Width*2, Height*2);
     }
-    public void Draw(int x, int y) {
+
+    public void Draw(int x, int y) => Draw(x, y, true);
+    public void Draw(int x, int y, bool refresh) {
         if (!Visible) return;
         if (Renderer == IntPtr.Zero) return;
         PiUi.SetColor(Renderer, Colors.Background);
@@ -78,7 +80,8 @@ public class Window : IComponent, IDisposable {
         PiUi.DrawPixel(Renderer, 1, Height - 2);
         PiUi.DrawPixel(Renderer, Width-2, Height - 2);
         if (PrimaryContainer != null) PrimaryContainer.Value.Draw(x + Padding, y + Padding);
-        SDL.RenderPresent(Renderer);
+        if (refresh)
+            SDL.RenderPresent(Renderer);
     }
 
     public (int, int) GetSize() {

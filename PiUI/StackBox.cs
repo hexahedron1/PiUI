@@ -24,6 +24,15 @@ public class StackBox(IntPtr parentRenderer) : IContainer {
 
         int yPos = y + Padding;
         foreach (IComponent component in Components) {
+            if (PiUi.DebugDraw) {
+                PiUi.SetColor(Renderer, PiUi.Colors.Debug2);
+                var (w, h) = component.GetSize();
+                SDL.FRect rect = new() {
+                    X = x + Padding, Y = yPos,
+                    W = w, H = h
+                };
+                SDL.RenderRect(Renderer, rect);
+            }
             component.Draw(x + Padding, yPos);
             yPos += component.GetSize().Item2 + Spacing;
         }

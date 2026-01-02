@@ -7,19 +7,20 @@ namespace PiUI;
 /// <summary>
 /// Main class for managing the entire GUI
 /// </summary>
-public static class PiUi {
+public static partial class PiUi {
     internal static List<Window> FloatingWindows = [];
     public static Window? PrimaryWindow;
     public static class Colors {
         public static int Outline { get; set; } = 0x1f1515;
         public static int Debug1 { get; set; } = 0xe6482e;
         public static int Debug2 { get; set; } = 0x3978a8;
+        public static int Debug3 { get; set; } = 0xb6d53c;
+        public static int Debug4 { get; set; } = 0xeea160;
     }
-    public delegate void EmptyDelegate();
-    public static event EmptyDelegate? Exit;
     public static bool DebugDraw = false;
     public static Font RegularFont;
     public static Font SmallFont;
+
     public static bool Init(string title, int w, int h) {
         PrimaryWindow = new Window(title, w, h);
         PrimaryWindow.Primary = true;
@@ -28,24 +29,28 @@ public static class PiUi {
             SDL.LogError(SDL.LogCategory.System, $"Failed to init SDL: {SDL.GetError()}");
             return false;
         }
+
         SDL.DestroyRenderer(PrimaryWindow.Renderer);
         SDL.DestroyWindow(PrimaryWindow.SdlWindow);
-        PrimaryWindow.SdlWindow = SDL.CreateWindow(PrimaryWindow.Title, PrimaryWindow.Width, PrimaryWindow.Height, SDL.WindowFlags.Hidden);
+        PrimaryWindow.SdlWindow = SDL.CreateWindow(PrimaryWindow.Title, PrimaryWindow.Width, PrimaryWindow.Height,
+            SDL.WindowFlags.Hidden);
         PrimaryWindow.Renderer = SDL.CreateRenderer(PrimaryWindow.SdlWindow, null);
         SDL.SetDefaultTextureScaleMode(PrimaryWindow.Renderer, SDL.ScaleMode.PixelArt);
         PrimaryWindow.Closing += () => _loop = false;
         SDL.SetRenderScale(PrimaryWindow.Renderer, 2, 2);
+        SDL.HideCursor();
         PrimaryWindow.RefreshSize();
         string configFolder = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "piui");
         foreach (string[] path in new string[][] {
-                     [ ],
-                     [ "fonts" ],
-                     [ "icons" ]
+                     [],
+                     ["fonts"],
+                     ["icons"]
                  }) {
             string finalPath = path.Aggregate(configFolder, Path.Join);
             if (!Directory.Exists(finalPath)) Directory.CreateDirectory(finalPath);
             Console.WriteLine($"Restored {finalPath}");
         }
+
         Console.WriteLine("Loading normal font...");
         ExtractResource("PiUI.Resources.aseprite_font.png", Path.Join(configFolder, "fonts", "aseprite.png"));
         IntPtr regularSurface = Image.Load(Path.Join(configFolder, "fonts", "aseprite.png"));
@@ -59,6 +64,7 @@ public static class PiUi {
                 if ((r == 0 && g == 0 && b == 0 && a == 255)
                     || (r == 255 && g == 0 && b == 0 && a == 0)) break;
             }
+
             char c = char.ConvertFromUtf32(i + 0x20)[0];
             RegularFont.Glyphs.Add(c, new SDL.FRect {
                 X = gx,
@@ -67,6 +73,7 @@ public static class PiUi {
                 H = 7
             });
         }
+
         Console.WriteLine("Loading small font...");
         ExtractResource("PiUI.Resources.aseprite_mini.png", Path.Join(configFolder, "fonts", "aseprite_mini.png"));
         IntPtr smallSurface = Image.Load(Path.Join(configFolder, "fonts", "aseprite_mini.png"));
@@ -80,6 +87,7 @@ public static class PiUi {
                 if ((r == 0 && g == 0 && b == 0 && a == 255)
                     || (r == 255 && g == 0 && b == 0 && a == 0)) break;
             }
+
             char c = char.ConvertFromUtf32(i + 0x20)[0];
             SmallFont.Glyphs.Add(c, new SDL.FRect {
                 X = gx,
@@ -88,9 +96,59 @@ public static class PiUi {
                 H = 5
             });
         }
+        Console.WriteLine("Loading cursors...");
+        ExtractResource("PiUI.Resources.cursor.png", Path.Join(configFolder, "cursor.png"));
+        cursorSurface = Image.Load(Path.Join(configFolder, "cursor.png"));
         return true;
     }
-    
+
+    private static IntPtr cursorSurface = IntPtr.Zero;
+    private static Cursor[] cursors = [
+        new (new() {
+            X = 0, Y = 0,
+            W = 9, H = 9
+        }, 1, 1),
+        new (new() {
+            X = 9, Y = 0,
+            W = 5, H = 11
+        }, 2, 5),
+        new (new() {
+            X = 14, Y = 0,
+            W = 11, H = 5
+        }, 5, 2),
+        new (new() {
+            X = 25, Y = 0,
+            W = 11, H = 11
+        }, 5, 5),
+        new (new() {
+            X = 36, Y = 0,
+            W = 10, H = 12
+        }, 3, 1),
+        new (new() {
+            X = 46, Y = 0,
+            W = 7, H = 11
+        }, 3, 9),
+        new (new() {
+            X = 53, Y = 0,
+            W = 9, H = 9
+        }, 4, 4),
+        new (new() {
+            X = 62, Y = 0,
+            W = 5, H = 11
+        }, 2, 5)
+    ];
+    public static CursorType Cursor { get; set; }
+
+    public enum CursorType {
+        Pointer,
+        VertArrows,
+        HorizArrows,
+        Arrows,
+        Hand,
+        Question,
+        Deny,
+        Text
+    }
 
     private static void ExtractResource(string name, string path) {
         Console.WriteLine($"Extracting {name} to {path}...");
@@ -114,10 +172,6 @@ public static class PiUi {
         SDL.RenderRect(renderer, pixel);
     }
 
-    public static void DrawText(IntPtr renderer, string text, int x, int y, Font font, SDL.Color color) {
-        
-    }
-
     internal static void SetColor(IntPtr renderer, (byte, byte, byte) color) {
         SDL.SetRenderDrawColor(renderer, color.Item1, color.Item2, color.Item3, 255);
     } internal static void SetColor(IntPtr renderer, int hexcolor) {
@@ -125,6 +179,8 @@ public static class PiUi {
         SDL.SetRenderDrawColor(renderer, color.Item1, color.Item2, color.Item3, 255);
     }
     private static bool _loop = true;
+    public static int MouseX;
+    public static int MouseY;
     public static void Start() {
         Console.WriteLine("Starting UI loop...");
         if (PrimaryWindow is null) {
@@ -139,13 +195,46 @@ public static class PiUi {
                     case SDL.EventType.Quit:
                         PrimaryWindow.Close();
                         break;
+                    case SDL.EventType.MouseMotion:
+                        SDL.GetMouseState(out float mx, out float my);
+                        MouseX = (int)mx / 2;
+                        MouseY = (int)my / 2;
+                        MouseMoved?.Invoke(MouseX, MouseY, null);
+                        break;
+                    case SDL.EventType.MouseButtonDown:
+                        Console.WriteLine($"{MouseX}, {MouseY}, {@event.Button.Button}");
+                        MouseDown?.Invoke(MouseX, MouseY, @event.Button.Button);
+                        break;
+                    case SDL.EventType.MouseButtonUp:
+                        Console.WriteLine($"{MouseX}, {MouseY}, {@event.Button.Button}");
+                        MouseUp?.Invoke(MouseX, MouseY, @event.Button.Button);
+                        break;
                 }
             }
-            PrimaryWindow.Draw(0, 0);
+            Cursor = CursorType.Pointer;
+            PrimaryWindow.Draw(0, 0, false);
+            if (DebugDraw) {
+                SetColor(PrimaryWindow.Renderer, Colors.Debug3);
+                SDL.RenderLine(PrimaryWindow.Renderer, 0, MouseY, PrimaryWindow.Width, MouseY);
+                SDL.RenderLine(PrimaryWindow.Renderer, MouseX, 0,   MouseX, PrimaryWindow.Width);
+            }
+            IntPtr tex = SDL.CreateTextureFromSurface(PrimaryWindow.Renderer, cursorSurface);
+            var sRect = cursors[(int)Cursor].TexCoords;
+            var dRect = new SDL.FRect {
+                X = MouseX - cursors[(int)Cursor].Center.Item1,
+                Y = MouseY - cursors[(int)Cursor].Center.Item2,
+                W = sRect.W,
+                H = sRect.H
+            };
+            SDL.RenderTexture(PrimaryWindow.Renderer, tex, in sRect, in dRect);
+            SDL.DestroyTexture(tex);
+            
+            SDL.RenderPresent(PrimaryWindow.Renderer);
         }
         Exit?.Invoke();
         SDL.DestroySurface(RegularFont.Surface);
         SDL.DestroySurface(SmallFont.Surface);
+        SDL.DestroySurface(cursorSurface);
         SDL.Quit();
     }
 }

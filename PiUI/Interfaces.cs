@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using SDL3;
 
 namespace PiUI;
@@ -9,14 +10,18 @@ public interface IComponent {
     public Property<bool> Visible { get; set; }
     public void Draw(int x, int y);
     public IntPtr Renderer { get; internal set; }
-    public (int, int) GetSize();
+    [Pure] public (int, int) GetSize();
+}
+public enum Alignment {
+    Left, Center, Right
 }
 
-/// <summary>
-/// A component that contains other components
-/// </summary>
-enum Alignment {
-    Left, Center, Right
+public enum Direction {
+    Horizontal, Vertical
+}
+
+public enum Icons {
+    
 }
 
 public interface IContainer : IComponent {

@@ -5,7 +5,7 @@ namespace PiUI;
 public class Font(IntPtr surface, int height, int spacing = 1) : IDisposable {
     public Dictionary<char, SDL.FRect> Glyphs { get; } = new();
     public int Height { get; } = height;
-    public int Spacing { get; } = spacing;
+    public int Spacing { get; } = spacing - 1;
     public SDL.FRect this[char c] => Glyphs.GetValueOrDefault(c, new ());
     private bool _disposed;
     public IntPtr Surface { get; private set; } = surface;
