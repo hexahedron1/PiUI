@@ -24,6 +24,9 @@
       <EmbeddedResource Include="Resources\aseprite_mini.png" />
       <None Remove="Resources\cursor.png" />
       <EmbeddedResource Include="Resources\cursor.png" />
+      <EmbeddedResource Include="Resources\icons.png" />
+      <None Remove="Resources\icons_symbolic.png" />
+      <EmbeddedResource Include="Resources\icons_symbolic.png" />
     </ItemGroup>
 
 </Project>

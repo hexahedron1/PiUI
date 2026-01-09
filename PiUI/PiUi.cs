@@ -20,6 +20,8 @@ public static partial class PiUi {
     public static bool DebugDraw = false;
     public static Font RegularFont;
     public static Font SmallFont;
+    public static IntPtr Icons;
+    public static IntPtr SymbolicIcons;
 
     public static bool Init(string title, int w, int h) {
         PrimaryWindow = new Window(title, w, h);
@@ -99,9 +101,16 @@ public static partial class PiUi {
         Console.WriteLine("Loading cursors...");
         ExtractResource("PiUI.Resources.cursor.png", Path.Join(configFolder, "cursor.png"));
         cursorSurface = Image.Load(Path.Join(configFolder, "cursor.png"));
+
+        Console.WriteLine("Loading icons...");
+        ExtractResource("PiUI.Resources.icons.png", Path.Join(configFolder, "icons.png"));
+        Icons = Image.Load(Path.Join(configFolder, "icons.png"));
+        
+        Console.WriteLine("Loading symbolic icons...");
+        ExtractResource("PiUI.Resources.icons_symbolic.png", Path.Join(configFolder, "icons_symbolic.png"));
+        SymbolicIcons = Image.Load(Path.Join(configFolder, "icons_symbolic.png"));
         return true;
     }
-
     private static IntPtr cursorSurface = IntPtr.Zero;
     private static Cursor[] cursors = [
         new (new() {

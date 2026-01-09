@@ -35,13 +35,16 @@ public class Button : IComponent {
 
     public Property<bool> Visible { get; set; } = true;
     public Property<string?> Text { get; set; }
-    public Property<Icons?> Icon { get; set; }
+    public Property<Icon?> Icon { get; set; }
     public IntPtr Renderer { get; set; }
     private bool _pressed;
     private int _x;
     private int _y;
     public event PiUi.EmptyDelegate? Pressed; 
-    public Button(IntPtr renderer, string? text = null, Icons? icon = null) {
+    public Button(IntPtr renderer, string? text = null, Icon? icon = null) {
+        if (text == null && icon == null) {
+            throw new ArgumentNullException(nameof(text) + "," + nameof(icon), "You must define either text or an icon");
+        }
         Text = text;
         Icon = icon;
         Renderer = renderer;
@@ -107,15 +110,20 @@ public class Button : IComponent {
         };
         PiUi.SetColor(Renderer, Colors.Shadow);
         SDL.RenderFillRect(Renderer, rect);
+        if (Icon.Value is not null) {
+            Icon.Value.Value.Draw(Renderer, x + 2, y + 2 + (_pressed ? 1 : 0));
+        }
         if (Text.Value is not null)
-            PiUi.RegularFont.DrawText(Renderer, Text!, x + 3, y + 3 + (_pressed ? 1 : 0), Colors.Content);
+            PiUi.RegularFont.DrawText(Renderer, Text!, x + (Icon.Value is not null ? (int)Icon.Value.Value.Location.W+1 : 0) + 2, y + 3 + (_pressed ? 1 : 0), Colors.Content);
         if (PiUi.MouseX >= _x && PiUi.MouseY >= _y && PiUi.MouseX <= _x + w && PiUi.MouseY <= _y + h - 4) PiUi.Cursor = PiUi.CursorType.Hand;
     }
     public (int, int) GetSize() {
-        if (Text.Value is null && Icon.Value is not null)
-            return (9, 13);
-        if (Icon.Value is null && Text.Value is not null)
-            return (5 + PiUi.RegularFont.MeasureText(Text!), 16);
-        return (11 + PiUi.RegularFont.MeasureText(Text!), 16);
+        int h = 16;
+        int w = 4;
+        if (Text.Value is not null)
+            w += PiUi.RegularFont.MeasureText(Text!) +1;
+        if (Icon.Value is not null)
+            w += (int)Icon.Value.Value.Location.W;
+        return (w, h);
     }
 }

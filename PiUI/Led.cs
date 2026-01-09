@@ -33,32 +33,32 @@ public class Led(IntPtr renderer, LedColor color) : IComponent {
     public IntPtr Renderer { get; set; } = renderer;
     public Property<LedColor> Color { get; set; } = color;
     public Property<bool> Lit { get; set; } = false;
-    public (int, int) GetSize() => (4, 4);
+    public (int, int) GetSize() => (5, 5);
     public void Draw(int x, int y) {
         if (!Visible) return;
         SDL.FRect rect = new SDL.FRect {
             X = x, Y = y,
-            W = 4, H = 4
+            W = 5, H = 5
         };
         PiUi.SetColor(renderer, Colors.Corner);
         SDL.RenderRect(renderer, rect);
         rect.X = x + 1;
-        rect.W = 2;
+        rect.W = 3;
         PiUi.SetColor(renderer, Colors.Edge);
         SDL.RenderRect(renderer, rect);
         rect = new SDL.FRect {
             X = x, Y = y+1,
-            W = 4, H = 2
+            W = 5, H = 3
         };
         SDL.RenderRect(renderer, rect);
         rect.X = x + 1;
-        rect.W = 2;
-        PiUi.SetColor(renderer, Colors.LightColors[Color].Item1);
-        SDL.RenderRect(renderer, rect);
-        PiUi.SetColor(renderer, Colors.LightColors[Color].Item2);
+        rect.W = 3;
+        PiUi.SetColor(renderer, Lit ? Colors.LightColors[Color].Item2 : Colors.LightColors[Color].Item1);
+        SDL.RenderFillRect(renderer, rect);
         if (Lit) {
-            PiUi.DrawPixel(renderer, x + 1, y + 1);
-            PiUi.DrawPixel(renderer, x + 2, y + 2);
+            PiUi.SetColor(renderer, Colors.LightColors[Color].Item1);
+            PiUi.DrawPixel(renderer, x + 1, y + 3);
+            PiUi.DrawPixel(renderer, x + 3, y + 1);
         }
     }
 }
