@@ -1,7 +1,7 @@
 using System.Data.Common;
 using SDL3;
 
-namespace PiUI;
+namespace COIL;
 
 enum ButtonState {
     Normal,
@@ -40,7 +40,7 @@ public class Button : IComponent {
     private bool _pressed;
     private int _x;
     private int _y;
-    public event PiUi.EmptyDelegate? Pressed; 
+    public event Coil.EmptyDelegate? Pressed; 
     public Button(IntPtr renderer, string? text = null, Icon? icon = null) {
         if (text == null && icon == null) {
             throw new ArgumentNullException(nameof(text) + "," + nameof(icon), "You must define either text or an icon");
@@ -48,12 +48,12 @@ public class Button : IComponent {
         Text = text;
         Icon = icon;
         Renderer = renderer;
-        PiUi.MouseDown += (x, y, btn) => {
+        Coil.MouseDown += (x, y, btn) => {
             if (btn != 1) return;
             (int w, int h) = GetSize();
             if (x >= _x && y >= _y && x <= _x + w && y <= _y + h - 4) _pressed = true;
         };
-        PiUi.MouseUp += (x, y, btn) => {
+        Coil.MouseUp += (x, y, btn) => {
             if (btn != 1) return;
             if (_pressed) {
                 _pressed = false;
@@ -82,46 +82,46 @@ public class Button : IComponent {
             X = x, Y = y + h - 5,
             W = w, H = 3
         };
-        PiUi.SetColor(Renderer, Colors.Background);
+        Coil.SetColor(Renderer, Colors.Background);
         SDL.RenderFillRect(Renderer, rect);
-        PiUi.SetColor(Renderer, Colors.LowerBorder);
+        Coil.SetColor(Renderer, Colors.LowerBorder);
         SDL.RenderRect(Renderer, rect);
         rect = new SDL.FRect {
             X = x, Y = y + (_pressed ? 1 : 0),
             W = w, H = h - 4
         };
-        PiUi.SetColor(Renderer, Colors.Background);
+        Coil.SetColor(Renderer, Colors.Background);
         SDL.RenderFillRect(Renderer, rect);
-        PiUi.SetColor(Renderer, Colors.Border);
+        Coil.SetColor(Renderer, Colors.Border);
         SDL.RenderRect(Renderer, rect);
-        PiUi.SetColor(Renderer, Colors.LowerBorder);
+        Coil.SetColor(Renderer, Colors.LowerBorder);
         // u d l r
         if (Neighbors is { Item1: false, Item3: false })
-            PiUi.DrawPixel(Renderer, x + 1, y + 1 + (_pressed ? 1 : 0)); // ul
+            Coil.DrawPixel(Renderer, x + 1, y + 1 + (_pressed ? 1 : 0)); // ul
         if (Neighbors is { Item1: false, Item4: false })
-            PiUi.DrawPixel(Renderer, (int)(x + rect.W) - 2, y + 1 + (_pressed ? 1 : 0)); // ur
+            Coil.DrawPixel(Renderer, (int)(x + rect.W) - 2, y + 1 + (_pressed ? 1 : 0)); // ur
         if (Neighbors is { Item2: false, Item3: false })
-            PiUi.DrawPixel(Renderer, x + 1, (int)(y + rect.H) - 2 + (_pressed ? 1 : 0)); // dl
+            Coil.DrawPixel(Renderer, x + 1, (int)(y + rect.H) - 2 + (_pressed ? 1 : 0)); // dl
         if (Neighbors is { Item2: false, Item4: false })
-            PiUi.DrawPixel(Renderer, (int)(x + rect.W) - 2, (int)(y + rect.H) - 2 + (_pressed ? 1 : 0)); // dr
+            Coil.DrawPixel(Renderer, (int)(x + rect.W) - 2, (int)(y + rect.H) - 2 + (_pressed ? 1 : 0)); // dr
         rect = new SDL.FRect {
             X = x, Y = y + h - 2,
             W = w, H = _pressed ? 1 : 2
         };
-        PiUi.SetColor(Renderer, Colors.Shadow);
+        Coil.SetColor(Renderer, Colors.Shadow);
         SDL.RenderFillRect(Renderer, rect);
         if (Icon.Value is not null) {
             Icon.Value.Value.Draw(Renderer, x + 2, y + 2 + (_pressed ? 1 : 0));
         }
         if (Text.Value is not null)
-            PiUi.RegularFont.DrawText(Renderer, Text!, x + (Icon.Value is not null ? (int)Icon.Value.Value.Location.W+1 : 0) + 2, y + 3 + (_pressed ? 1 : 0), Colors.Content);
-        if (PiUi.MouseX >= _x && PiUi.MouseY >= _y && PiUi.MouseX <= _x + w && PiUi.MouseY <= _y + h - 4) PiUi.Cursor = PiUi.CursorType.Hand;
+            Coil.RegularFont.DrawText(Renderer, Text!, x + (Icon.Value is not null ? (int)Icon.Value.Value.Location.W+1 : 0) + 2, y + 3 + (_pressed ? 1 : 0), Colors.Content);
+        if (Coil.MouseX >= _x && Coil.MouseY >= _y && Coil.MouseX <= _x + w && Coil.MouseY <= _y + h - 4) Coil.Cursor = Coil.CursorType.Hand;
     }
     public (int, int) GetSize() {
         int h = 16;
         int w = 4;
         if (Text.Value is not null)
-            w += PiUi.RegularFont.MeasureText(Text!) +1;
+            w += Coil.RegularFont.MeasureText(Text!) +1;
         if (Icon.Value is not null)
             w += (int)Icon.Value.Value.Location.W;
         return (w, h);
