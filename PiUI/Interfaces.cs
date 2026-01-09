@@ -13,15 +13,11 @@ public interface IComponent {
     [Pure] public (int, int) GetSize();
 }
 public enum Alignment {
-    Left, Center, Right
+    Start, Center, End
 }
 
 public enum Direction {
     Horizontal, Vertical
-}
-
-public enum Icons {
-    
 }
 
 public interface IContainer : IComponent {

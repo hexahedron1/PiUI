@@ -51,9 +51,9 @@ public class ButtonBox(IntPtr parentRenderer, Direction order = Direction.Horizo
         } else  {
             foreach (var btn in Buttons) {
                 var (bw, bh) = btn.GetSize();
-                h = Math.Max(h, bh);
                 w += bw;
             }
+            h = 16;
         } 
         return (w, h);
     }
