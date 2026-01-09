@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiUI", "PiUI\PiUI.csproj", "{FAA3AE8A-D5ED-405B-8600-7D85F64BF52C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coil", "Coil\Coil.csproj", "{FAA3AE8A-D5ED-405B-8600-7D85F64BF52C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{73E2B9C6-402A-4220-A732-844C55E4F301}"
 EndProject

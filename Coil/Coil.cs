@@ -2,12 +2,12 @@
 using System.Reflection;
 using SDL3;
 
-namespace PiUI;
+namespace COIL;
 
 /// <summary>
 /// Main class for managing the entire GUI
 /// </summary>
-public static partial class PiUi {
+public static partial class Coil {
     internal static List<Window> FloatingWindows = [];
     public static Window? PrimaryWindow;
     public static class Colors {
@@ -54,7 +54,7 @@ public static partial class PiUi {
         }
 
         Console.WriteLine("Loading normal font...");
-        ExtractResource("PiUI.Resources.aseprite_font.png", Path.Join(configFolder, "fonts", "aseprite.png"));
+        ExtractResource("Coil.Resources.aseprite_font.png", Path.Join(configFolder, "fonts", "aseprite.png"));
         IntPtr regularSurface = Image.Load(Path.Join(configFolder, "fonts", "aseprite.png"));
         RegularFont = new(regularSurface, 7);
         for (int i = 0; i < 0x4FF; i++) {
@@ -77,7 +77,7 @@ public static partial class PiUi {
         }
 
         Console.WriteLine("Loading small font...");
-        ExtractResource("PiUI.Resources.aseprite_mini.png", Path.Join(configFolder, "fonts", "aseprite_mini.png"));
+        ExtractResource("Coil.Resources.aseprite_mini.png", Path.Join(configFolder, "fonts", "aseprite_mini.png"));
         IntPtr smallSurface = Image.Load(Path.Join(configFolder, "fonts", "aseprite_mini.png"));
         SmallFont = new(smallSurface, 5);
         for (int i = 0; i < 0xFF; i++) {
@@ -99,15 +99,15 @@ public static partial class PiUi {
             });
         }
         Console.WriteLine("Loading cursors...");
-        ExtractResource("PiUI.Resources.cursor.png", Path.Join(configFolder, "cursor.png"));
+        ExtractResource("Coil.Resources.cursor.png", Path.Join(configFolder, "cursor.png"));
         cursorSurface = Image.Load(Path.Join(configFolder, "cursor.png"));
 
         Console.WriteLine("Loading icons...");
-        ExtractResource("PiUI.Resources.icons.png", Path.Join(configFolder, "icons.png"));
+        ExtractResource("Coil.Resources.icons.png", Path.Join(configFolder, "icons.png"));
         Icons = Image.Load(Path.Join(configFolder, "icons.png"));
         
         Console.WriteLine("Loading symbolic icons...");
-        ExtractResource("PiUI.Resources.icons_symbolic.png", Path.Join(configFolder, "icons_symbolic.png"));
+        ExtractResource("Coil.Resources.icons_symbolic.png", Path.Join(configFolder, "icons_symbolic.png"));
         SymbolicIcons = Image.Load(Path.Join(configFolder, "icons_symbolic.png"));
         return true;
     }

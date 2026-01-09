@@ -1,4 +1,5 @@
-namespace PiUI;
+
+namespace COIL;
 
 public class IconLabel(IntPtr renderer, Icon icon) : IComponent {
     

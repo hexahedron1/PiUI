@@ -1,7 +1,7 @@
 using System.Net.Security;
 using SDL3;
 
-namespace PiUI;
+namespace COIL;
 
 public enum LedColor {
     Red,
@@ -40,11 +40,11 @@ public class Led(IntPtr renderer, LedColor color) : IComponent {
             X = x, Y = y,
             W = 5, H = 5
         };
-        PiUi.SetColor(renderer, Colors.Corner);
+        Coil.SetColor(renderer, Colors.Corner);
         SDL.RenderRect(renderer, rect);
         rect.X = x + 1;
         rect.W = 3;
-        PiUi.SetColor(renderer, Colors.Edge);
+        Coil.SetColor(renderer, Colors.Edge);
         SDL.RenderRect(renderer, rect);
         rect = new SDL.FRect {
             X = x, Y = y+1,
@@ -53,12 +53,12 @@ public class Led(IntPtr renderer, LedColor color) : IComponent {
         SDL.RenderRect(renderer, rect);
         rect.X = x + 1;
         rect.W = 3;
-        PiUi.SetColor(renderer, Lit ? Colors.LightColors[Color].Item2 : Colors.LightColors[Color].Item1);
+        Coil.SetColor(renderer, Lit ? Colors.LightColors[Color].Item2 : Colors.LightColors[Color].Item1);
         SDL.RenderFillRect(renderer, rect);
         if (Lit) {
-            PiUi.SetColor(renderer, Colors.LightColors[Color].Item1);
-            PiUi.DrawPixel(renderer, x + 1, y + 3);
-            PiUi.DrawPixel(renderer, x + 3, y + 1);
+            Coil.SetColor(renderer, Colors.LightColors[Color].Item1);
+            Coil.DrawPixel(renderer, x + 1, y + 3);
+            Coil.DrawPixel(renderer, x + 3, y + 1);
         }
     }
 }
