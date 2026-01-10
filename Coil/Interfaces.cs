@@ -1,7 +1,7 @@
 using System.Diagnostics.Contracts;
 using SDL3;
 
-namespace PiUI;
+namespace COIL;
 
 /// <summary>
 /// A component that can be drawn inside a window

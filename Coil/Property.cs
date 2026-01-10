@@ -1,4 +1,5 @@
-namespace PiUI;
+
+namespace COIL;
 
 public class Property<T>(T v) {
     private T _value = v;

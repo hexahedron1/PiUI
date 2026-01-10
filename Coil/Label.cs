@@ -1,6 +1,6 @@
 using SDL3;
 
-namespace PiUI;
+namespace COIL;
 
 public class Label(IntPtr renderer, string text, Font font) : IComponent {
     public static class Colors {
