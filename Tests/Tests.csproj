@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PiUI\PiUI.csproj" />
+      <ProjectReference Include="..\Coil\Coil.csproj" />
     </ItemGroup>
 
 </Project>
