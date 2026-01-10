@@ -1,5 +1,5 @@
 using SDL3;
-namespace COIL;
+namespace PiUI;
 /// <summary>
 /// A container that lays out its components sequentially
 /// </summary>
@@ -15,8 +15,8 @@ public class StackBox(IntPtr parentRenderer, Direction dir = Direction.Vertical,
     public Property<int> Spacing { get; set; } = 1;
     public void Draw(int x, int y) {
         if (!Visible) return;
-        if (Coil.DebugDraw) {
-            Coil.SetColor(Renderer, Coil.Colors.Debug1);
+        if (PiUi.DebugDraw) {
+            PiUi.SetColor(Renderer, PiUi.Colors.Debug1);
             SDL.FRect rect = new() {
                 X = x, Y = y,
                 W = Width, H = Height
@@ -24,13 +24,13 @@ public class StackBox(IntPtr parentRenderer, Direction dir = Direction.Vertical,
             SDL.RenderRect(Renderer, rect);
         }
 
-        if (Direction == global::COIL.Direction.Vertical) {
+        if (Direction == PiUI.Direction.Vertical) {
             int yPos = y + Padding;
             Height = Padding;
             foreach (IComponent component in Components) {
                 var (w, h) = component.GetSize();
-                if (Coil.DebugDraw) {
-                    Coil.SetColor(Renderer, Coil.Colors.Debug2);
+                if (PiUi.DebugDraw) {
+                    PiUi.SetColor(Renderer, PiUi.Colors.Debug2);
                     SDL.FRect rect = new() {
                         X = x + Padding, Y = yPos,
                         W = w, H = h
@@ -39,9 +39,9 @@ public class StackBox(IntPtr parentRenderer, Direction dir = Direction.Vertical,
                 }
 
                 int xOff = Alignment.Value switch {
-                    global::COIL.Alignment.Start => 0,
-                    global::COIL.Alignment.Center => (Width- Padding*2) / 2 - w / 2,
-                    global::COIL.Alignment.End => Width- Padding*2 - w,
+                    PiUI.Alignment.Start => 0,
+                    PiUI.Alignment.Center => Width / 2 - w / 2,
+                    PiUI.Alignment.End => Width - w,
                     _ => 0
                 };
                 component.Draw(x + Padding + xOff, yPos);
@@ -56,8 +56,8 @@ public class StackBox(IntPtr parentRenderer, Direction dir = Direction.Vertical,
             Width = Padding;
             foreach (IComponent component in Components) {
                 var (w, h) = component.GetSize();
-                if (Coil.DebugDraw) {
-                    Coil.SetColor(Renderer, Coil.Colors.Debug2);
+                if (PiUi.DebugDraw) {
+                    PiUi.SetColor(Renderer, PiUi.Colors.Debug2);
                     SDL.FRect rect = new() {
                         X = xPos, Y = y + Padding,
                         W = w, H = h
@@ -65,9 +65,9 @@ public class StackBox(IntPtr parentRenderer, Direction dir = Direction.Vertical,
                     SDL.RenderRect(Renderer, rect);
                 }
                 int yOff = Alignment.Value switch {
-                    global::COIL.Alignment.Start => 0,
-                    global::COIL.Alignment.Center => (Height- Padding*2) / 2 - h / 2,
-                    global::COIL.Alignment.End => Height - Padding*2 - h,
+                    PiUI.Alignment.Start => 0,
+                    PiUI.Alignment.Center => Height / 2 - h / 2,
+                    PiUI.Alignment.End => Height - h,
                     _ => 0
                 };
                 component.Draw(xPos ,y + Padding + yOff);

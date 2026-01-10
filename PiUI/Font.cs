@@ -1,6 +1,6 @@
 using SDL3;
 
-namespace COIL;
+namespace PiUI;
 
 public class Font(IntPtr surface, int height, int spacing = 1) : IDisposable {
     public Dictionary<char, SDL.FRect> Glyphs { get; } = new();
@@ -31,7 +31,7 @@ public class Font(IntPtr surface, int height, int spacing = 1) : IDisposable {
                 W = rect.W, H = rect.H
             };
             IntPtr tex = SDL.CreateTextureFromSurface(renderer, Surface);
-            var col = Coil.UnpackColor(color);
+            var col = PiUi.UnpackColor(color);
             SDL.SetTextureColorMod(tex, col.Item1, col.Item2, col.Item3);
             SDL.RenderTexture(renderer, tex, in rect, in drect);
             x += (int)rect.W + Spacing;

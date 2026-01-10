@@ -1,6 +1,6 @@
 using SDL3;
 
-namespace COIL;
+namespace PiUI;
 
 public class ButtonBox(IntPtr parentRenderer, Direction order = Direction.Horizontal) : IComponent {
     public List<Button> Buttons { get; } = [];
@@ -10,8 +10,8 @@ public class ButtonBox(IntPtr parentRenderer, Direction order = Direction.Horizo
     
     public void Draw(int x, int y) {
         var (Width, Height) = GetSize();
-        if (Coil.DebugDraw) {
-            Coil.SetColor(Renderer, Coil.Colors.Debug1);
+        if (PiUi.DebugDraw) {
+            PiUi.SetColor(Renderer, PiUi.Colors.Debug1);
             SDL.FRect rect = new() {
                 X = x, Y = y,
                 W = Width, H = Height

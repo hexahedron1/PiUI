@@ -1,6 +1,6 @@
-namespace COIL;
+namespace PiUI;
 
-public partial class Coil {
+public partial class PiUi {
     
     public delegate void EmptyDelegate();
     public static event EmptyDelegate? Exit;

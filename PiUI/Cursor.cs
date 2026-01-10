@@ -1,6 +1,6 @@
 using SDL3;
 
-namespace COIL;
+namespace PiUI;
 
 public class Cursor(SDL.FRect coords, int cx, int cy) {
     public SDL.FRect TexCoords { get; } = coords;

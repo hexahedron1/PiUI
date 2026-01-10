@@ -1,6 +1,6 @@
 using SDL3;
 
-namespace COIL;
+namespace PiUI;
 /// <summary>
 /// A window that can contains UI components
 /// </summary>
@@ -69,16 +69,16 @@ public class Window : IComponent, IDisposable {
     public void Draw(int x, int y, bool refresh) {
         if (!Visible) return;
         if (Renderer == IntPtr.Zero) return;
-        Coil.SetColor(Renderer, Colors.Background);
+        PiUi.SetColor(Renderer, Colors.Background);
         SDL.RenderClear(Renderer);
-        Coil.SetColor(Renderer, Colors.InternalBorder);
+        PiUi.SetColor(Renderer, Colors.InternalBorder);
         SDL.FRect inBorder = new SDL.FRect {
             X = 0, Y = 0,
             W = Width, H = Height
         };
         SDL.RenderRect(Renderer, inBorder);
-        Coil.DrawPixel(Renderer, 1, Height - 2);
-        Coil.DrawPixel(Renderer, Width-2, Height - 2);
+        PiUi.DrawPixel(Renderer, 1, Height - 2);
+        PiUi.DrawPixel(Renderer, Width-2, Height - 2);
         if (PrimaryContainer != null) PrimaryContainer.Value.Draw(x + Padding, y + Padding);
         if (refresh)
             SDL.RenderPresent(Renderer);
@@ -88,7 +88,7 @@ public class Window : IComponent, IDisposable {
         return (Width, Height);
     }
 
-    public Coil.EmptyDelegate? Closing;
+    public PiUi.EmptyDelegate? Closing;
     public void Close() {
         Closing?.Invoke();
         Dispose();
